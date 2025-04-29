@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo de Usuarias</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-green-100 text-gray-800">
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Catálogo de Emprendedoras</h1>
+    <div id="catalogo" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <!-- Las tarjetas se insertarán aquí -->
+    </div>
+  </div>
+
+  <script>
+    const URL = "https://script.google.com/macros/s/AKfycbzjY5o7J1UAoLbxLazLgtvqAxBYcwsj2YJnqkP0q9tF1xUs7h6SnGYpWg_jn0--NuDh/exec";
+
+    fetch(URL)
+      .then(res => res.json())
+      .then(data => {
+        const contenedor = document.getElementById('catalogo');
+        // Saltamos la primera fila si es encabezado
+        for (let i = 1; i < data.length; i++) {
+          const [nombre, direccion, correo, redes, sector, productos, fotoURL] = data[i];
+
+          const tarjeta = document.createElement('div');
+          tarjeta.className = "bg-white p-4 rounded-xl shadow-lg";
+
+          tarjeta.innerHTML = `
+            <img src="${fotoURL}" alt="Foto de ${nombre}" class="w-full h-48 object-cover rounded-md mb-3">
+            <h2 class="text-xl font-semibold">${nombre}</h2>
+            <p><strong>Dirección:</strong> ${direccion}</p>
+            <p><strong>Correo:</strong> ${correo}</p>
+            <p><strong>Redes:</strong> ${redes}</p>
+            <p><strong>Sector:</strong> ${sector}</p>
+            <p><strong>Productos:</strong> ${productos}</p>
+          `;
+
+          contenedor.appendChild(tarjeta);
+        }
+      })
+      .catch(err => {
+        document.getElementById('catalogo').innerHTML = `<p class="text-red-600">Error al cargar el catálogo 😥</p>`;
+        console.error("Error al obtener datos:", err);
+      });
+  </script>
+</body>
+</html>
